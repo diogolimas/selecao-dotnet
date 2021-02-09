@@ -11,6 +11,7 @@ namespace selecao_dotnet.Services
     {
         public static string GenerateToken(User user)
         {
+            
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Settings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -25,6 +26,7 @@ namespace selecao_dotnet.Services
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+            
         }
     }
 }

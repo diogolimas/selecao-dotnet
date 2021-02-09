@@ -7,6 +7,10 @@ using System;
 using selecao_dotnet.Models;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using selecao_dotnet.Data;
+using Microsoft.EntityFrameworkCore;
+
+
 
 namespace selecao_dotnet.Controllers
 {
@@ -16,20 +20,26 @@ namespace selecao_dotnet.Controllers
         [HttpPost]
         [Route("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<dynamic>> Authenticate([FromBody]User model)
+        public async Task<ActionResult<dynamic>> Authenticate([FromServices] DataContext context, [FromBody]User model)
         {
+           // var userOne = await context.User.ToListAsync();
+            var userOne = await context.User
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Username == model.Username);
             // Recupera o usuário
             var user = UserRepository.Get(model.Username, model.Password);
 
             // Verifica se o usuário existe
-            if (user == null)
+            if (user == null && userOne == null)
                 return NotFound(new { message = "Usuário ou senha inválidos" });
 
             // Gera o Token
-            var token = TokenService.GenerateToken(user);
-
+            
+            
             // Oculta a senha
-            user.Password = "";
+            if(user != null){
+                var token = TokenService.GenerateToken(user);
+                user.Password = "";
             
             // Retorna os dados
             return new
@@ -37,6 +47,18 @@ namespace selecao_dotnet.Controllers
                 user = user,
                 token = token
             };
+            }else{
+                var token = TokenService.GenerateToken(userOne);
+                userOne.Password = "";
+
+                return new 
+                {
+                    user = userOne,
+                    token = token
+                };
+            }
+            
+            
         }
 
         [HttpGet]

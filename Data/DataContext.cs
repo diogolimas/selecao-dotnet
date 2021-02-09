@@ -14,5 +14,7 @@ namespace selecao_dotnet.Data
         //coleções que eu quero utilizar e salvar localmente no pc
         public DbSet<Estudante> Estudante { get; set; }
         public DbSet<CartaoCredito> CartaoCredito { get;set; }
+        public DbSet<User> User { get;set; }
+
     }
 }

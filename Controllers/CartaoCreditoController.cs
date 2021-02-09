@@ -4,16 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using selecao_dotnet.Data;
 using selecao_dotnet.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace selecao_dotnet.Controllers
 {
     [ApiController]
     [Route("v1/cartaocredito")]
-
+    
     public class CartaoCreditoController: ControllerBase
     {
         [HttpGet]
         [Route("")]
+        [Authorize]
         public async Task<ActionResult<List<CartaoCredito>>> Get([FromServices] DataContext context)
         {
             var cartoes = await context.CartaoCredito

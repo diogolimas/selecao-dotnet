@@ -19,6 +19,9 @@ namespace selecao_dotnet.Models
         [Required(ErrorMessage = "Este campo é obrigatório")]
         public string Cvv  { get; set; }  
         public int EstudanteId { get; set; }
+
+        public float debito { get;set; }
         public Estudante Estudante { get; set; }
+
     }
 }
